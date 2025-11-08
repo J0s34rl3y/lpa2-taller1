@@ -1,0 +1,67 @@
+# Configuración de Pre-commit hooks para el proyecto
+# Estos hooks se ejecutan automáticamente antes de cada commit
+
+repos:
+  # Hooks generales de formateo y limpieza
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        name: Eliminar espacios en blanco al final
+      - id: end-of-file-fixer
+        name: Asegurar línea vacía al final de archivos
+      - id: check-yaml
+        name: Verificar sintaxis YAML
+      - id: check-added-large-files
+        name: Prevenir archivos grandes (>500KB)
+        args: ['--maxkb=500']
+      - id: check-json
+        name: Verificar sintaxis JSON
+      - id: check-merge-conflict
+        name: Detectar marcadores de merge conflict
+      - id: check-case-conflict
+        name: Detectar conflictos de mayúsculas/minúsculas en nombres de archivos
+
+  # Black - Formateador de código Python
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        name: Formatear código con Black
+        language_version: python3.12
+        args: ['--line-length=100']
+
+  # Flake8 - Linter para Python
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        name: Verificar estilo de código con Flake8
+        args: ['--max-line-length=100', '--extend-ignore=E203,W503']
+
+  # isort - Ordenar imports de Python
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        name: Ordenar imports con isort
+        args: ['--profile=black', '--line-length=100']
+
+  # Pytest - Ejecutar tests antes del commit
+  - repo: local
+    hooks:
+      - id: pytest-check
+        name: Ejecutar tests con pytest
+        entry: bash -c 'source .venv/bin/activate && pytest tests/ -q --tb=short'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+
+      - id: pytest-cov
+        name: Verificar cobertura de código (80% mínimo)
+        entry: bash -c 'source .venv/bin/activate && pytest tests/ --cov=src --cov-fail-under=80 -q'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]

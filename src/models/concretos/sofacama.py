@@ -3,8 +3,8 @@ Clase SofaCama que implementa herencia múltiple.
 Esta clase hereda tanto de Sofa como de Cama.
 """
 
-from .sofa import Sofa
 from .cama import Cama
+from .sofa import Sofa
 
 
 class SofaCama(Sofa, Cama):
@@ -133,7 +133,19 @@ class SofaCama(Sofa, Cama):
 
         self._modo_actual = "sofa"
         return f"Cama convertida a sofá usando mecanismo {self.mecanismo_conversion}"
-        pass
+
+    def transformar(self) -> str:
+        """
+        Alterna entre modo sofá y modo cama.
+        Método de conveniencia que llama a convertir_a_cama o convertir_a_sofa.
+
+        Returns:
+            str: Mensaje del resultado de la transformación
+        """
+        if self._modo_actual == "sofa":
+            return self.convertir_a_cama()
+        else:
+            return self.convertir_a_sofa()
 
     def obtener_descripcion(self) -> str:
         """
@@ -161,9 +173,7 @@ class SofaCama(Sofa, Cama):
         """
         capacidades = {
             "como_sofa": self.capacidad_personas,
-            "como_cama": 2
-            if self.tamaño_cama in ["matrimonial", "queen", "king"]
-            else 1,
+            "como_cama": 2 if self.tamaño_cama in ["matrimonial", "queen", "king"] else 1,
         }
         return capacidades
 

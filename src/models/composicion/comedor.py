@@ -5,6 +5,7 @@ Un comedor está compuesto por una mesa y varias sillas.
 
 # Importar List para anotaciones de tipo
 from typing import List
+
 # from ..concretos.mesa import Mesa
 # from ..concretos.silla import Silla
 
@@ -59,14 +60,14 @@ class Comedor:
             str: Mensaje de confirmación
         """
         # Validar que sea realmente una Silla (importación dinámica para evitar problemas de import)
-        Silla = type(self._sillas[0]) if self._sillas else None
-        if Silla and not isinstance(silla, Silla):
-            return "Error: Solo se pueden agregar objetos de tipo Silla"
+        if self._sillas:
+            Silla = type(self._sillas[0])
+            if not isinstance(silla, Silla):
+                return "Error: Solo se pueden agregar objetos de tipo Silla"
+
         capacidad_maxima = self._calcular_capacidad_maxima()
         if len(self._sillas) >= capacidad_maxima:
-            return (
-                f"No se pueden agregar más sillas. Capacidad máxima: {capacidad_maxima}"
-            )
+            return f"No se pueden agregar más sillas. Capacidad máxima: {capacidad_maxima}"
         self._sillas.append(silla)
         return f"Silla {getattr(silla, 'nombre', str(silla))} agregada exitosamente al comedor"
 
@@ -155,9 +156,7 @@ class Comedor:
         for silla in self._sillas:
             if hasattr(silla, "material"):
                 materiales.add(silla.material)
-            if hasattr(silla, "material_tapizado") and getattr(
-                silla, "material_tapizado", None
-            ):
+            if hasattr(silla, "material_tapizado") and getattr(silla, "material_tapizado", None):
                 materiales.add(silla.material_tapizado)
         return list(materiales)
 

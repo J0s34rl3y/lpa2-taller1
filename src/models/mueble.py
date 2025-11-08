@@ -31,7 +31,8 @@ class Mueble(ABC):
         self._nombre = nombre
         self._material = material
         self._color = color
-        self._precio_base = precio_base
+        # Usar el setter para validación
+        self.precio_base = precio_base
 
     @property
     def nombre(self) -> str:

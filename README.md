@@ -1,6 +1,6 @@
 # LPA2 Taller1: Pruebas Unitarias Tienda de Muebles
 
-![commits](https://badgen.net/github/commits/UR-CC/lpa2-taller1?icon=github) 
+![commits](https://badgen.net/github/commits/UR-CC/lpa2-taller1?icon=github)
 ![last_commit](https://img.shields.io/github/last-commit/UR-CC/lpa2-taller1)
 
 ## Objetivos
@@ -110,7 +110,7 @@ Archivo `.coveragerc`:
 ```ini
 [run]
 source = src
-omit = 
+omit =
     */__pycache__/*
     */tests/*
     */venv/*
@@ -138,10 +138,10 @@ fail_under = 80
 def test_nombre_del_test():
     # Arrange: Preparar el escenario
     objeto = Clase(parametro=valor)
-    
+
     # Act: Ejecutar la acción a probar
     resultado = objeto.metodo()
-    
+
     # Assert: Verificar el resultado
     assert resultado == valor_esperado
 ```
@@ -167,12 +167,12 @@ class TestMueble:
         # Verificar que Mueble es abstracta
         with pytest.raises(TypeError):
             mueble = Mueble("Mesa", "Madera", 100.0)
-    
+
     def test_tiene_metodos_abstractos(self):
         # Verificar que tiene métodos abstractos
         assert hasattr(Mueble, 'calcular_precio')
         assert hasattr(Mueble, 'obtener_descripcion')
-        
+
         # Verificar que son abstractos
         assert Mueble.calcular_precio.__isabstractmethod__
         assert Mueble.obtener_descripcion.__isabstractmethod__
@@ -190,22 +190,22 @@ class TestSilla:
     @pytest.fixture
     def silla_basica(self):
         return Silla("Silla Básica", "Madera", 50.0, 4, "Madera")
-    
+
     def test_instanciacion_correcta(self, silla_basica):
         # Verificar herencia de atributos
         assert silla_basica.nombre == "Silla Básica"
         assert silla_basica.material == "Madera"
         assert silla_basica.precio_base == 50.0
-        
+
         # Verificar atributos específicos
         assert silla_basica.numero_patas == 4
         assert silla_basica.tipo_madera == "Madera"
-    
+
     def test_calcular_precio(self, silla_basica):
         # Probar polimorfismo
         precio = silla_basica.calcular_precio()
         assert precio == 50.0  # Precio base sin modificaciones
-    
+
     def test_obtener_descripcion(self, silla_basica):
         descripcion = silla_basica.obtener_descripcion()
         assert "Silla Básica" in descripcion
@@ -223,19 +223,19 @@ from src.models.concretos.sofacama import SofaCama
 class TestSofaCama:
     def test_herencia_multiple(self):
         sofa_cama = SofaCama("Sofá Cama Moderno", "Tela", 500.0, 3, "Queen")
-        
+
         # Verificar atributos de Sofa
         assert sofa_cama.capacidad_personas == 3
-        
+
         # Verificar atributos de Cama
         assert sofa_cama.tamaño_colchon == "Queen"
-        
+
         # Verificar método específico
         assert hasattr(sofa_cama, 'transformar')
-    
+
     def test_resolucion_metodos(self):
         sofa_cama = SofaCama("Sofá Cama", "Cuero", 600.0, 2, "Full")
-        
+
         # Verificar que usa el método correcto (MRO)
         precio = sofa_cama.calcular_precio()
         assert precio > 600.0  # Debe incluir recargos de ambas clases
@@ -257,13 +257,13 @@ class TestComedor:
         mesa = Mesa("Mesa Comedor", "Roble", 200.0, "Rectangular", 6)
         sillas = [Silla("Silla Comedor", "Roble", 50.0, 4, "Roble") for _ in range(6)]
         return Comedor("Comedor Familiar", mesa, sillas)
-    
+
     def test_composicion_correcta(self, comedor_basico):
         assert comedor_basico.mesa is not None
         assert len(comedor_basico.sillas) == 6
         assert isinstance(comedor_basico.mesa, Mesa)
         assert all(isinstance(silla, Silla) for silla in comedor_basico.sillas)
-    
+
     def test_calcular_precio_total(self, comedor_basico):
         precio_total = comedor_basico.calcular_precio()
         precio_esperado = 200.0 + (6 * 50.0)  # Mesa + 6 sillas
@@ -284,29 +284,29 @@ class TestTienda:
     @pytest.fixture
     def tienda_vacia(self):
         return Tienda()
-    
+
     @pytest.fixture
     def silla_mock(self):
         mock_silla = Mock(spec=Silla)
         mock_silla.nombre = "Silla Mock"
         mock_silla.calcular_precio.return_value = 75.0
         return mock_silla
-    
+
     def test_agregar_producto(self, tienda_vacia, silla_mock):
         tienda_vacia.agregar_producto(silla_mock)
         assert len(tienda_vacia.inventario) == 1
         assert tienda_vacia.inventario[0] == silla_mock
-    
+
     def test_vender_producto_existente(self, tienda_vacia, silla_mock):
         tienda_vacia.agregar_producto(silla_mock)
-        
+
         with patch('builtins.print') as mock_print:
             resultado = tienda_vacia.vender_producto("Silla Mock")
-            
+
             assert resultado is True
             assert len(tienda_vacia.inventario) == 0
             mock_print.assert_called_once()
-    
+
     def test_vender_producto_inexistente(self, tienda_vacia):
         resultado = tienda_vacia.vender_producto("Producto Inexistente")
         assert resultado is False
@@ -400,10 +400,10 @@ def test_aplicar_descuento_por_material():
     # RED: Escribir prueba primero
     tienda = Tienda()
     silla = Silla("Silla", "Roble", 100.0, 4, "Roble")
-    
+
     tienda.agregar_producto(silla)
     tienda.aplicar_descuento_material("Roble", 0.1)  # 10% descuento
-    
+
     assert silla.precio_base == 90.0  # Esta prueba fallará inicialmente
 ```
 
@@ -481,6 +481,252 @@ src/models/mueble.py       15      3    80%   22-24
 src/services/tienda.py     45     10    78%   15-18, 33-39
 ```
 
+## Instalación y Configuración
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/J0s34rl3y/lpa2-taller1.git
+cd lpa2-taller1
+```
+
+### 2. Crear y activar entorno virtual
+
+```bash
+# Crear entorno virtual
+python -m venv .venv
+
+# Activar en Linux/Mac
+source .venv/bin/activate
+
+# Activar en Windows
+.venv\Scripts\activate
+```
+
+### 3. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Instalar pre-commit hooks (opcional pero recomendado)
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+## Ejecución de Tests
+
+### Tests Básicos
+
+```bash
+# Ejecutar todos los tests
+pytest
+
+# Ejecutar tests con output detallado
+pytest -v
+
+# Ejecutar tests específicos
+pytest tests/unit/models/test_mueble.py
+pytest tests/integration/
+
+# Ejecutar tests por marca
+pytest -m unit
+pytest -m integration
+```
+
+### Tests con Cobertura
+
+```bash
+# Ejecutar tests con reporte de cobertura en terminal
+pytest tests/ --cov=src --cov-report=term-missing
+
+# Generar reporte HTML de cobertura
+pytest tests/ --cov=src --cov-report=html
+
+# Ver reporte HTML en navegador
+xdg-open htmlcov/index.html  # Linux
+open htmlcov/index.html       # Mac
+start htmlcov/index.html      # Windows
+
+# Verificar que se cumple el mínimo de cobertura (80%)
+pytest tests/ --cov=src --cov-fail-under=80
+```
+
+### Tests con Diferentes Modos
+
+```bash
+# Modo silencioso (solo resumen)
+pytest -q
+
+# Mostrar print statements
+pytest -s
+
+# Detener en primer fallo
+pytest -x
+
+# Mostrar variables locales en fallos
+pytest -l
+
+# Ejecutar solo tests que fallaron anteriormente
+pytest --lf
+
+# Ver tests más lentos
+pytest --durations=10
+```
+
+## Pre-commit Hooks
+
+El proyecto está configurado con pre-commit hooks que se ejecutan automáticamente antes de cada commit para garantizar la calidad del código.
+
+### Hooks Configurados
+
+1. **Formateo y Limpieza**
+   - Eliminar espacios en blanco al final
+   - Asegurar línea vacía al final de archivos
+   - Verificar sintaxis YAML/JSON
+   - Prevenir archivos grandes
+
+2. **Linting y Formateo de Código**
+   - **Black**: Formateo automático de código
+   - **Flake8**: Verificación de estilo PEP8
+   - **isort**: Ordenamiento de imports
+
+3. **Tests Automáticos**
+   - **pytest**: Ejecuta todos los tests
+   - **pytest-cov**: Verifica cobertura mínima del 80%
+
+### Ejecutar Pre-commit Manualmente
+
+```bash
+# Ejecutar en todos los archivos
+pre-commit run --all-files
+
+# Ejecutar en archivos staged
+pre-commit run
+
+# Actualizar versiones de hooks
+pre-commit autoupdate
+```
+
+### Saltarse Pre-commit (no recomendado)
+
+```bash
+git commit --no-verify -m "mensaje"
+```
+
+## Estructura de Tests
+
+### Organización
+
+```
+tests/
+├── conftest.py           # Fixtures compartidas globalmente
+├── unit/                 # Tests unitarios (396 tests)
+│   ├── conftest.py       # Fixtures para tests unitarios
+│   └── models/
+│       ├── test_mueble.py              # Tests de clase abstracta base
+│       ├── categorias/                 # Tests de clases abstractas intermedias
+│       │   ├── test_almacenamiento.py  # ~30 tests
+│       │   ├── test_asientos.py        # ~35 tests
+│       │   └── test_superficies.py     # ~27 tests
+│       ├── concretos/                  # Tests de clases concretas
+│       │   ├── test_silla.py           # ~50 tests (herencia simple)
+│       │   ├── test_sofacama.py        # ~45 tests (herencia múltiple)
+│       │   ├── test_mesa.py            # ~50 tests
+│       │   ├── test_sofa.py            # ~35 tests
+│       │   ├── test_armario.py         # ~20 tests
+│       │   ├── test_cajonera.py        # ~17 tests
+│       │   ├── test_cama.py            # ~35 tests
+│       │   ├── test_escritorio.py      # ~25 tests
+│       │   └── test_sillon.py          # ~22 tests
+│       └── composicion/
+│           └── test_comedor.py         # ~55 tests (composición)
+└── integration/          # Tests de integración
+    └── test_integracion_sistema.py    # ~11 tests
+
+Total: 396 tests - 100% passing
+Coverage: 95.99% (objetivo: 80%)
+```
+
+### Tipos de Tests Implementados
+
+#### 1. Tests de Abstracción
+- Verificación de que clases abstractas no se pueden instanciar
+- Validación de métodos abstractos
+- Pruebas de herencia correcta
+
+#### 2. Tests de Herencia Simple
+- `Silla` hereda de `Asiento` que hereda de `Mueble`
+- Verificación de MRO (Method Resolution Order)
+- Tests de polimorfismo
+
+#### 3. Tests de Herencia Múltiple
+- `SofaCama` hereda de `Sofa` y `Cama`
+- Verificación de resolución de conflictos
+- Tests de métodos únicos (`transformar()`)
+
+#### 4. Tests de Composición
+- `Comedor` compone `Mesa` y lista de `Sillas`
+- Tests de agregación/eliminación de componentes
+- Verificación de independencia de objetos
+
+#### 5. Tests de Casos Edge
+- Valores límite (0, negativos, muy grandes)
+- Strings vacíos y None
+- Listas vacías
+- Condiciones de error
+
+#### 6. Tests de Integración
+- Escenarios completos de uso
+- Interacción entre múltiples clases
+- Flujos de trabajo reales
+
+### Fixtures Disponibles
+
+Las fixtures están definidas en `tests/unit/conftest.py`:
+
+- `silla_basica`, `silla_con_ruedas`
+- `mesa_rectangular`, `mesa_redonda`
+- `sofa_basico`, `sofa_modular`
+- `cama_individual`, `cama_matrimonial`
+- `sofacama_basico`
+- `comedor_completo`
+- `lista_sillas`
+- `materiales_validos`, `colores_validos`
+
+## Resultados de Tests
+
+### Última Ejecución
+
+```
+396 tests pasados (100%)
+Cobertura: 95.99%
+Tiempo: ~0.89 segundos
+```
+
+### Cobertura por Módulo
+
+| Módulo | Cobertura | Estado |
+|--------|-----------|--------|
+| `models/mueble.py` | 100% | OK |
+| `models/categorias/almacenamiento.py` | 100% | OK |
+| `models/categorias/asientos.py` | 98% | OK |
+| `models/categorias/superficies.py` | 100% | OK |
+| `models/concretos/armario.py` | 100% | OK |
+| `models/concretos/cajonera.py` | 100% | OK |
+| `models/concretos/cama.py` | 100% | OK |
+| `models/concretos/escritorio.py` | 100% | OK |
+| `models/concretos/mesa.py` | 100% | OK |
+| `models/concretos/silla.py` | 90% | OK |
+| `models/concretos/sillon.py` | 100% | OK |
+| `models/concretos/sofa.py` | 100% | OK |
+| `models/concretos/sofacama.py` | 92% | OK |
+| `models/composicion/comedor.py` | 86% | OK |
+
+**Nota**: Los módulos `main.py`, `ui/`, y `services/tienda.py` están excluidos de la cobertura por ser UI/servicios no testeados.
+
 ## Entregables
 
 El estudiante debe actualizar su repositorio personal con:
@@ -529,4 +775,3 @@ El estudiante debe actualizar su repositorio personal con:
     ```
 
 **Nota**: repo [solución al proyecto Muebles](https://github.com/axlcraft/lpa1-taller-poo).
-

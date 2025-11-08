@@ -4,19 +4,18 @@ Punto de entrada principal para la aplicación Tienda de Muebles.
 Este archivo inicializa la aplicación y proporciona datos de ejemplo.
 """
 
-from services.tienda import TiendaMuebles
-from ui.menu import MenuTienda
-
+from models.composicion.comedor import Comedor
+from models.concretos.armario import Armario
+from models.concretos.cajonera import Cajonera
+from models.concretos.cama import Cama
+from models.concretos.escritorio import Escritorio
+from models.concretos.mesa import Mesa
 from models.concretos.silla import Silla
 from models.concretos.sillon import Sillon
 from models.concretos.sofa import Sofa
-from models.concretos.mesa import Mesa
-from models.concretos.armario import Armario
-from models.concretos.cama import Cama
-from models.concretos.escritorio import Escritorio
-from models.concretos.cajonera import Cajonera
 from models.concretos.sofacama import SofaCama
-from models.composicion.comedor import Comedor
+from services.tienda import TiendaMuebles
+from ui.menu import MenuTienda
 
 
 def crear_catalogo_inicial(tienda: "TiendaMuebles") -> None:
@@ -199,19 +198,14 @@ def crear_catalogo_inicial(tienda: "TiendaMuebles") -> None:
     )
 
     todos_los_muebles = (
-        sillas
-        + mesas
-        + asientos_grandes
-        + almacenamiento
-        + dormitorio_oficina
-        + [sofacama]
+        sillas + mesas + asientos_grandes + almacenamiento + dormitorio_oficina + [sofacama]
     )
 
     for mueble in todos_los_muebles:
         resultado = tienda.agregar_mueble(mueble)
         print(f"  ✓ {resultado}")
 
-    print(f"✅ Catálogo inicial creado con éxito!")
+    print(f" Catálogo inicial creado con éxito!")
 
 
 def crear_comedores_ejemplo(tienda: "TiendaMuebles") -> None:
@@ -278,7 +272,7 @@ def crear_comedores_ejemplo(tienda: "TiendaMuebles") -> None:
         resultado = tienda.agregar_comedor(comedor)
         print(f"  ✓ {resultado}")
 
-    print("✅ Comedores de ejemplo creados!")
+    print(" Comedores de ejemplo creados!")
 
 
 def aplicar_descuentos_ejemplo(tienda: "TiendaMuebles") -> None:
@@ -300,7 +294,7 @@ def aplicar_descuentos_ejemplo(tienda: "TiendaMuebles") -> None:
         resultado = tienda.aplicar_descuento(categoria, porcentaje)
         print(f"  ✓ {resultado}")
 
-    print("✅ Descuentos aplicados!")
+    print(" Descuentos aplicados!")
 
 
 def mostrar_estadisticas_iniciales(tienda: "TiendaMuebles") -> None:
@@ -310,20 +304,16 @@ def mostrar_estadisticas_iniciales(tienda: "TiendaMuebles") -> None:
     Args:
         tienda: Instancia de TiendaMuebles para obtener estadísticas
     """
-    print("\n📊 Estadísticas iniciales de la tienda:")
+    print("\n Estadísticas iniciales de la tienda:")
 
     stats = tienda.obtener_estadisticas()
-    print(f"  📦 Total de muebles: {stats.get('total_muebles', 0)}")
+    print(f"   Total de muebles: {stats.get('total_muebles', 0)}")
     print(f"  🍽️ Total de comedores: {stats.get('total_comedores', 0)}")
     print(f"  💰 Valor del inventario: ${stats.get('valor_inventario', 0):,.2f}")
     print(f"  🏷️ Descuentos activos: {stats.get('descuentos_activos', {})}")
     print(f"  🛒 Ventas realizadas: {stats.get('ventas_realizadas', 0)}")
-    print(
-        f"  📈 Total muebles vendidos (acumulado): {stats.get('total_muebles_vendidos', 0)}"
-    )
-    print(
-        f"  💵 Valor total de ventas (acumulado): ${stats.get('valor_total_ventas', 0):,.2f}"
-    )
+    print(f"  📈 Total muebles vendidos (acumulado): {stats.get('total_muebles_vendidos', 0)}")
+    print(f"  💵 Valor total de ventas (acumulado): ${stats.get('valor_total_ventas', 0):,.2f}")
     print("\n  📋 Distribución por tipos:")
     for tipo, cantidad in (stats.get("tipos_muebles", {}) or {}).items():
         print(f"    • {tipo}: {cantidad} unidades")
@@ -355,7 +345,7 @@ def main():
 
         mostrar_estadisticas_iniciales(tienda)
 
-        print("\n🎯 Iniciando interfaz de usuario...")
+        print("\n Iniciando interfaz de usuario...")
         menu = MenuTienda(tienda)
 
         input("\nPresiona Enter para iniciar el menú interactivo...")
@@ -371,7 +361,7 @@ def main():
         traceback.print_exc()
     finally:
         print("\n" + "=" * 50)
-        print("✨ Programa finalizado. ¡Gracias por usar la Tienda de Muebles! ✨")
+        print(" Programa finalizado. ¡Gracias por usar la Tienda de Muebles! ")
 
 
 if __name__ == "__main__":
